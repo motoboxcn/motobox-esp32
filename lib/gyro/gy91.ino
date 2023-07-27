@@ -9,26 +9,15 @@ float roll, pitch;
 int mX, mY, mZ;
 
 #define SDA_PIN 32  // 0x68
-#define SCL_PIN 25  // 0x69
+#define SCL_PIN 33  // 0x69
 
-void setup_gy91()
-{
-    Serial.begin(115200);
-    Wire.begin(SDA_PIN, SCL_PIN);
-    mpu.setWire(&Wire);
-    mpu.beginAccel();
-    mpu.beginGyro();
-    mpu.beginMag();
-    bmp.begin();
-}
-
-void get_gy91()
+void getGy91()
 {
     mpu.accelUpdate(); // 更新加速度计数据
     aX = mpu.accelX();
     aY = mpu.accelY();
     aZ = mpu.accelZ();
-    roll = atan2(aY, aZ) * 180.0 / PI;
+    roll = (atan2(aY, aZ) * 180.0 / PI)+90.0;
     pitch = atan(-aX / sqrt(aY * aY + aZ * aZ)) * 180.0 / PI;
 
     mpu.gyroUpdate(); // 更新陀螺仪数据
@@ -63,7 +52,7 @@ void get_gy91()
     // Serial.print("\tpitch: " + String(pitch));
 
     lv_img_set_angle(ui_motoRoll,roll*10);
-    lv_label_set_text_fmt(ui_rollText, "%d°", roll);
+    lv_label_set_text_fmt(ui_rollText, "%d°", int(roll));
 
     // Serial.print("\tTemperature(*C): ");
     // Serial.print(bmp.readTemperature());
@@ -72,4 +61,31 @@ void get_gy91()
     // Serial.print(bmp.readPressure());
 
     // Serial.println("");
+}
+
+void loopGy91(void *pvParameters)
+{
+   for(;;)
+   {
+       getGy91();
+   }
+}
+
+void setupGy91()
+{
+    Wire.begin(SDA_PIN, SCL_PIN);
+    mpu.setWire(&Wire);
+    mpu.beginAccel();
+    mpu.beginGyro();
+    mpu.beginMag();
+    bmp.begin();
+
+    xTaskCreatePinnedToCore(
+        loopGy91, /* Function to implement the task */
+        "loop_gy91", /* Name of the task */
+        1024*2,  /* Stack size in words */
+        NULL,  /* Task input parameter */
+        1,  /* Priority of the task */
+        NULL,  /* Task handle. */
+        1); /* Core where the task should run */
 }

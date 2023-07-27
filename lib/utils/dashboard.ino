@@ -1,6 +1,31 @@
 #include <esp_adc_cal.h>
 #include <lvgl.h>
+#include <TFT_eSPI.h>
 #include <ui.h>
+
+// SCL 12, SDA 14,RES 27, DC 26, CS 25
+
+/*Change to your screen resolution*/
+static const uint16_t screenWidth = TFT_HEIGHT;
+static const uint16_t screenHeight = TFT_WIDTH;
+
+static lv_disp_draw_buf_t draw_buf;
+static lv_color_t buf[screenWidth * screenHeight / 10];
+
+TFT_eSPI tft = TFT_eSPI(); /* TFT instance */
+
+/* Display flushing */
+void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
+{
+    uint32_t w = (area->x2 - area->x1 + 1);
+    uint32_t h = (area->y2 - area->y1 + 1);
+
+    tft.startWrite();
+    tft.setAddrWindow(area->x1, area->y1, w, h);
+    tft.pushColors((uint16_t *)&color_p->full, w * h, true);
+    tft.endWrite();
+    lv_disp_flush_ready(disp);
+}
 
 // 改变 ui 样式
 void ui_wifi_connect_off()
@@ -57,7 +82,7 @@ void speed_dashboard(int speed)
 
     if (speed < 80)
     {
-        lv_obj_set_style_arc_color(ui_speed, lv_color_hex(0x2274C2), LV_PART_INDICATOR | LV_STATE_DEFAULT ); // 设置颜色
+        lv_obj_set_style_arc_color(ui_speed, lv_color_hex(0x2274C2), LV_PART_INDICATOR | LV_STATE_DEFAULT); // 设置颜色
     }
     else if (speed < 120)
     {
@@ -71,37 +96,29 @@ void speed_dashboard(int speed)
     {
         lv_obj_set_style_arc_color(ui_speed, lv_color_hex(0xEF1616), LV_PART_INDICATOR | LV_STATE_DEFAULT);
     }
-
+    lv_timer_handler();
 }
 // 初始化 ui 仪表盘 1-299 变化
 void init_speed_dashboard()
 {
     // Initialize dashboard
-    for (int i = 0; i <= 299; i += 4)
+    for (int i = 0; i <= 299; i += 4 * 2)
     {
         speed_dashboard(i);
-        lv_timer_handler();
-        delay(5);
     }
 
-    for (int j = 299; j >= 0; j -= 4)
+    for (int j = 299; j >= 0; j -= 4 * 2)
     {
         speed_dashboard(j);
-        lv_timer_handler();
-        delay(5);
     }
-
     // Reset dashboard
     speed_dashboard(0);
-    lv_timer_handler();
 }
-
-
 
 // 初始化ADC配置
 void init_adc()
 {
-    adc1_config_width(ADC_WIDTH_BIT_12); // 设置ADC位宽为12位
+    adc1_config_width(ADC_WIDTH_BIT_12);                       // 设置ADC位宽为12位
     adc1_config_channel_atten(ADC1_CHANNEL_7, ADC_ATTEN_DB_0); // 设置通道7的衰减为0dB
 }
 
@@ -132,4 +149,26 @@ int get_battery()
     // 根据VREF和ADC最大值（2^12）计算电压值
     int voltage = (adc_reading * 1100) / 4095; // 若您的ADC位宽不是12位，则需要根据实际位宽修改这里的计算公式
     battery_dashboard(voltage);
+}
+
+// 初始化 ui
+void dashboardInit()
+{
+    lv_init();
+    tft.begin();        /* TFT init */
+    tft.setRotation(3); /* Landscape orientation, flipped */
+
+    lv_disp_draw_buf_init(&draw_buf, buf, NULL, screenWidth * screenHeight / 10);
+    /*Initialize the display*/
+    static lv_disp_drv_t disp_drv;
+    lv_disp_drv_init(&disp_drv);
+    /*Change the following line to your display resolution*/
+    disp_drv.hor_res = screenWidth;
+    disp_drv.ver_res = screenHeight;
+    disp_drv.flush_cb = my_disp_flush;
+    disp_drv.draw_buf = &draw_buf;
+    lv_disp_drv_register(&disp_drv);
+
+    ui_init();
+    init_speed_dashboard();
 }
