@@ -23,7 +23,7 @@ lv_obj_t *ui_luxiang;
 lv_obj_t *ui_wifi;
 lv_obj_t *ui_websocket;
 lv_obj_t *ui_weixing;
-lv_obj_t *ui_haibaText;
+lv_obj_t *ui_altitudeText;
 lv_obj_t *ui_gpsTime;
 lv_obj_t *ui_handing;
 lv_obj_t *ui_handingText;

@@ -136,16 +136,16 @@ lv_obj_set_align( ui_weixing, LV_ALIGN_CENTER );
 lv_obj_add_flag( ui_weixing, LV_OBJ_FLAG_ADV_HITTEST );   /// Flags
 lv_obj_clear_flag( ui_weixing, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 
-ui_haibaText = lv_label_create(ui_Screen1);
-lv_obj_set_width( ui_haibaText, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_haibaText, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_haibaText, 92 );
-lv_obj_set_y( ui_haibaText, -47 );
-lv_obj_set_align( ui_haibaText, LV_ALIGN_CENTER );
-lv_label_set_text(ui_haibaText,"31m");
-lv_obj_set_style_text_color(ui_haibaText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_text_opa(ui_haibaText, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_text_font(ui_haibaText, &lv_font_montserrat_22, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_altitudeText = lv_label_create(ui_Screen1);
+lv_obj_set_width( ui_altitudeText, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_altitudeText, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_altitudeText, 92 );
+lv_obj_set_y( ui_altitudeText, -47 );
+lv_obj_set_align( ui_altitudeText, LV_ALIGN_CENTER );
+lv_label_set_text(ui_altitudeText,"31m");
+lv_obj_set_style_text_color(ui_altitudeText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_altitudeText, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_altitudeText, &lv_font_montserrat_22, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_gpsTime = lv_label_create(ui_Screen1);
 lv_obj_set_width( ui_gpsTime, LV_SIZE_CONTENT);  /// 1

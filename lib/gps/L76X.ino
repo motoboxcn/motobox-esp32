@@ -12,53 +12,58 @@ SoftwareSerial ss(RXPin, TXPin);
 
 void displayInfo()
 {
-  Serial.print(F("Location: ")); 
-  if (gps.location.isValid())
-  {
-    Serial.print(gps.location.lat(), 6);
-    Serial.print(F(","));
-    Serial.print(gps.location.lng(), 6);
-  }
-  else
-  {
-    Serial.print(F("INVALID"));
-  }
-
-  Serial.print(F("  Date/Time: "));
+  // time&date
   if (gps.date.isValid())
   {
-    Serial.print(gps.date.month());
-    Serial.print(F("/"));
-    Serial.print(gps.date.day());
-    Serial.print(F("/"));
-    Serial.print(gps.date.year());
+    char date[20];
+    sprintf(date, "%d-%d-%d %d:%d:%d", gps.date.year(), gps.date.month(), gps.date.day(), gps.time.hour(), gps.time.minute(), gps.time.second());
+    ui_time_update(date);
+  }
+  else{
+    ui_time_update("00-00-00 00:00:00");
+  }
+  // speed
+  if (gps.speed.isValid())
+  {
+    speed_dashboard(gps.speed.kmph());
   }
   else
   {
-    Serial.print(F("INVALID"));
+    speed_dashboard(0);
   }
-
-  Serial.print(F(" "));
-  if (gps.time.isValid())
+  // location
+  if (gps.location.isValid())
   {
-    if (gps.time.hour() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.hour());
-    Serial.print(F(":"));
-    if (gps.time.minute() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.minute());
-    Serial.print(F(":"));
-    if (gps.time.second() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.second());
-    Serial.print(F("."));
-    if (gps.time.centisecond() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.centisecond());
+    char location[20];
+    sprintf(location, "%f,%f", gps.location.lat(), gps.location.lng());
+    lv_label_set_text(ui_suzhou, location);
   }
   else
   {
-    Serial.print(F("INVALID"));
+    lv_label_set_text(ui_suzhou, "0,0");
   }
-
-  Serial.println();
+  // course
+  if (gps.course.isValid())
+  {
+    char course[20];
+    sprintf(course, "%f", gps.course.deg());
+    lv_label_set_text(ui_handingText, course);
+  }
+  else
+  {
+    lv_label_set_text(ui_handingText, "0");
+  }
+  // altitude
+  if (gps.altitude.isValid())
+  {
+    char altitude[20];
+    sprintf(altitude, "%f", gps.altitude.meters());
+    lv_label_set_text(ui_altitudeText, altitude);
+  }
+  else
+  {
+    lv_label_set_text(ui_altitudeText, "0");
+  }
 }
 
 void LoopL76X()
@@ -71,7 +76,8 @@ void LoopL76X()
   if (millis() > 5000 && gps.charsProcessed() < 10)
   {
     Serial.println(F("No GPS detected: check wiring."));
-    while(true);
+    while (true)
+      ;
   }
 }
 

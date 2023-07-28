@@ -172,3 +172,12 @@ void dashboardInit()
     ui_init();
     init_speed_dashboard();
 }
+
+// change ui Time label by gps time
+// fmt GPS date as YYYY-MM-DD HH:MM:SS
+void ui_time_update(const char *time)
+{
+    lv_label_set_text(ui_gpsTime, time);
+}
+
+

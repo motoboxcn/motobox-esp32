@@ -39,7 +39,7 @@ extern lv_obj_t *ui_luxiang;
 extern lv_obj_t *ui_wifi;
 extern lv_obj_t *ui_websocket;
 extern lv_obj_t *ui_weixing;
-extern lv_obj_t *ui_haibaText;
+extern lv_obj_t *ui_altitudeText;
 extern lv_obj_t *ui_gpsTime;
 extern lv_obj_t *ui_handing;
 extern lv_obj_t *ui_handingText;
