@@ -1,5 +1,6 @@
 #include <TinyGPSPlus.h>
 #include <SoftwareSerial.h>
+#include <dashboard.ino>
 
 static const int RXPin = 22, TXPin = 23;
 static const uint32_t GPSBaud = 9600;
@@ -16,38 +17,46 @@ void displayInfo()
   if (gps.date.isValid())
   {
     char date[20];
-    sprintf(date, "%d-%d-%d %d:%d:%d", gps.date.year(), gps.date.month(), gps.date.day(), gps.time.hour(), gps.time.minute(), gps.time.second());
+    // fmt GPS date as YYYY-MM-DD HH:MM:SS
+    sprintf(date, "%04d-%02d-%02d %02d:%02d:%02d", gps.date.year(), gps.date.month(), gps.date.day(), gps.time.hour(), gps.time.minute(), gps.time.second());
     ui_time_update(date);
+    Serial.printf("date: %s\t", date);
   }
   else{
-    ui_time_update("00-00-00 00:00:00");
+    ui_time_update("1992-03-01 00:00:00");
   }
   // speed
   if (gps.speed.isValid())
   {
-    speed_dashboard(gps.speed.kmph());
+    static int speed = 0;
+    speed = gps.speed.kmph();
+    speed_dashboard(speed);
+    Serial.printf("speed: %d\t", speed);
   }
   else
   {
     speed_dashboard(0);
   }
+
   // location
   if (gps.location.isValid())
   {
-    char location[20];
+    char location[64];
     sprintf(location, "%f,%f", gps.location.lat(), gps.location.lng());
     lv_label_set_text(ui_suzhou, location);
+    Serial.printf("location: %s\t", location);
   }
   else
   {
     lv_label_set_text(ui_suzhou, "0,0");
   }
-  // course
+  // course to int
   if (gps.course.isValid())
   {
     char course[20];
-    sprintf(course, "%f", gps.course.deg());
+    sprintf(course, "%.f", gps.course.deg());
     lv_label_set_text(ui_handingText, course);
+    Serial.printf("course: %s\t", course);
   }
   else
   {
@@ -57,13 +66,39 @@ void displayInfo()
   if (gps.altitude.isValid())
   {
     char altitude[20];
-    sprintf(altitude, "%f", gps.altitude.meters());
+    sprintf(altitude, "%.f", gps.altitude.meters());
     lv_label_set_text(ui_altitudeText, altitude);
+    Serial.printf("altitude: %s\t", altitude);
   }
   else
   {
     lv_label_set_text(ui_altitudeText, "0");
   }
+  // satellites
+  if (gps.satellites.isValid())
+  {
+    char satellites[20];
+    sprintf(satellites, "%d", gps.satellites.value());
+    Serial.printf("satellites: %s\t", satellites);
+    // lv_label_set_text(ui_satellitesText, satellites);
+  }
+  else
+  {
+    // lv_label_set_text(ui_satellitesText, "0");
+  }
+  // hdop
+  if (gps.hdop.isValid())
+  {
+    char hdop[20];
+    sprintf(hdop, "%.f", gps.hdop.value());
+    Serial.printf("hdop: %s\t", hdop);
+    // lv_label_set_text(ui_hdopText, hdop);
+  }
+  else
+  {
+    // lv_label_set_text(ui_hdopText, "0");
+  }
+  Serial.println();
 }
 
 void LoopL76X()

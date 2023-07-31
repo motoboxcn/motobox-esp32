@@ -27,7 +27,7 @@ lv_obj_t *ui_altitudeText;
 lv_obj_t *ui_gpsTime;
 lv_obj_t *ui_handing;
 lv_obj_t *ui_handingText;
-lv_obj_t *ui_bettery;
+lv_obj_t *ui_battery;
 lv_obj_t *ui____initial_actions0;
 const lv_img_dsc_t *ui_imgset_ai[1] = {&ui_img_ai70_png};
 const lv_img_dsc_t *ui_imgset_430168462[1] = {&ui_img_965679087};

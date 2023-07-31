@@ -11,13 +11,14 @@ int mX, mY, mZ;
 #define SDA_PIN 32  // 0x68
 #define SCL_PIN 33  // 0x69
 
-void getGy91()
+void loop_gy91()
 {
     mpu.accelUpdate(); // 更新加速度计数据
     aX = mpu.accelX();
     aY = mpu.accelY();
     aZ = mpu.accelZ();
-    roll = (atan2(aY, aZ) * 180.0 / PI)+90.0;
+    // 设置 roll 变化范围为 0 ~ 180
+    roll = atan(aY / sqrt(aX * aX + aZ * aZ)) * 180.0 / PI;
     pitch = atan(-aX / sqrt(aY * aY + aZ * aZ)) * 180.0 / PI;
 
     mpu.gyroUpdate(); // 更新陀螺仪数据
@@ -65,10 +66,11 @@ void getGy91()
 
 void loopGy91(void *pvParameters)
 {
-   for(;;)
-   {
-       getGy91();
-   }
+    for (;;)
+    {
+        loop_gy91();
+        delay(100);
+    }
 }
 
 void setupGy91()
@@ -79,13 +81,5 @@ void setupGy91()
     mpu.beginGyro();
     mpu.beginMag();
     bmp.begin();
-
-    xTaskCreatePinnedToCore(
-        loopGy91, /* Function to implement the task */
-        "loop_gy91", /* Name of the task */
-        1024*2,  /* Stack size in words */
-        NULL,  /* Task input parameter */
-        1,  /* Priority of the task */
-        NULL,  /* Task handle. */
-        1); /* Core where the task should run */
+    xTaskCreate(loopGy91, "loopGy91", 1024*2, NULL, 10, NULL);
 }

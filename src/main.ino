@@ -1,7 +1,9 @@
 #include <gy91.ino>
 #include <lvgl.h>
-#include <dashboard.ino>
 #include <L76X.ino>
+#include <battery.ino>
+#include <wifi.ino>
+
 
 void setup()
 {
@@ -10,6 +12,8 @@ void setup()
   // apps
   setupGy91();
   setupL76X();
+  setupWifi();
+  // setup_adc();
   Serial.println("Setup done");
 }
 

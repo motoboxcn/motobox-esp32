@@ -43,7 +43,7 @@ extern lv_obj_t *ui_altitudeText;
 extern lv_obj_t *ui_gpsTime;
 extern lv_obj_t *ui_handing;
 extern lv_obj_t *ui_handingText;
-extern lv_obj_t *ui_bettery;
+extern lv_obj_t *ui_battery;
 extern lv_obj_t *ui____initial_actions0;
 
 LV_IMG_DECLARE( ui_img_haiba_png);   // assets/haiba.png
