@@ -66,7 +66,7 @@ void loop_gy91()
 
 void loopGy91(void *pvParameters)
 {
-    for (;;)
+    while (1)
     {
         loop_gy91();
         delay(100);

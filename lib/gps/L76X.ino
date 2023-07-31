@@ -46,10 +46,7 @@ void displayInfo()
     lv_label_set_text(ui_suzhou, location);
     Serial.printf("location: %s\t", location);
   }
-  else
-  {
-    lv_label_set_text(ui_suzhou, "0,0");
-  }
+  
   // course to int
   if (gps.course.isValid())
   {
@@ -121,5 +118,5 @@ void setupL76X()
   // 串口通信初始化
   ss.begin(GPSBaud);
   Serial.println("ESP32 with GPS is set up!");
-  // xTaskCreate(LoopL76X, "LoopL76X", 1024*512, NULL, 1, NULL);
+  // xTaskCreate(LoopL76X, "LoopL76X", 1024, NULL, 5, NULL);
 }

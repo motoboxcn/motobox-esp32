@@ -36,8 +36,9 @@ void ui_wifi_connect_off()
     lv_timer_handler();
 }
 
-void ui_wifi_connect_on()
+void ui_wifi_connect_on(const char *location)
 {
+    lv_label_set_text(ui_suzhou, location);
     // lv_obj_set_style_blend_mode(ui_weixing, LV_BLEND_MODE_NORMAL, 0);
     // lv_obj_set_style_blend_mode(ui_websocket, LV_BLEND_MODE_NORMAL, 0);
     lv_obj_set_style_blend_mode(ui_wifi, LV_BLEND_MODE_NORMAL, 0);
