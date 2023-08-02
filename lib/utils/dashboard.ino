@@ -29,47 +29,34 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 // 改变 ui 样式
 void ui_wifi_connect_off()
 {
-    lv_obj_set_style_blend_mode(ui_weixing, LV_BLEND_MODE_MULTIPLY, 0);
-    lv_obj_set_style_blend_mode(ui_websocket, LV_BLEND_MODE_MULTIPLY, 0);
     lv_obj_set_style_blend_mode(ui_wifi, LV_BLEND_MODE_MULTIPLY, 0);
-    lv_obj_set_style_blend_mode(ui_luxiang, LV_BLEND_MODE_MULTIPLY, 0);
     lv_timer_handler();
 }
 
 void ui_wifi_connect_on(const char *location)
 {
-    lv_label_set_text(ui_suzhou, location);
-    // lv_obj_set_style_blend_mode(ui_weixing, LV_BLEND_MODE_NORMAL, 0);
-    // lv_obj_set_style_blend_mode(ui_websocket, LV_BLEND_MODE_NORMAL, 0);
     lv_obj_set_style_blend_mode(ui_wifi, LV_BLEND_MODE_NORMAL, 0);
     lv_timer_handler();
-    // lv_obj_set_style_blend_mode(ui_luxiang, LV_BLEND_MODE_NORMAL, 0);
-}
-
-void ui_websocket_on()
-{
-    lv_obj_set_style_blend_mode(ui_websocket, LV_BLEND_MODE_NORMAL, 0);
-    Serial.println("Connected to GPS WebSockets server");
 }
 
 void ui_gps_on()
 {
-    lv_obj_set_style_blend_mode(ui_weixing, LV_BLEND_MODE_NORMAL, 0);
+    lv_obj_set_style_blend_mode(ui_gps, LV_BLEND_MODE_NORMAL, 0);
 }
 
 void ui_gps_off()
 {
-    lv_obj_set_style_blend_mode(ui_weixing, LV_BLEND_MODE_MULTIPLY, 0);
+    lv_obj_set_style_blend_mode(ui_gps, LV_BLEND_MODE_MULTIPLY, 0);
 }
 
 void ui_trip_on()
 {
-    lv_obj_set_style_blend_mode(ui_luxiang, LV_BLEND_MODE_NORMAL, 0);
+    lv_obj_set_style_blend_mode(ui_gps, LV_BLEND_MODE_NORMAL, 0);
 }
 
 void ui_trip_off()
 {
-    lv_obj_set_style_blend_mode(ui_luxiang, LV_BLEND_MODE_MULTIPLY, 0);
+    lv_obj_set_style_blend_mode(ui_gps, LV_BLEND_MODE_MULTIPLY, 0);
 }
 
 // 时速超过 一定值时，仪表盘变化：
@@ -80,7 +67,7 @@ void ui_trip_off()
 void speed_dashboard(int speed)
 {
     lv_arc_set_value(ui_speed, speed);
-    lv_label_set_text_fmt(ui_speed2, "%d", speed);
+    lv_label_set_text_fmt(ui_speedText, "%d", speed);
 
     if (speed < 80)
     {
@@ -123,7 +110,7 @@ void dashboardInit()
 {
     lv_init();
     tft.begin();        /* TFT init */
-    tft.setRotation(3); /* Landscape orientation, flipped */
+    tft.setRotation(1); /* Landscape orientation, flipped */
 
     lv_disp_draw_buf_init(&draw_buf, buf, NULL, screenWidth * screenHeight / 10);
     /*Initialize the display*/

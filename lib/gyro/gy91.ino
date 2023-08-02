@@ -8,8 +8,8 @@ float aX, aY, aZ, aSqrt, gX, gY, gZ, mDirection;
 float roll, pitch;
 int mX, mY, mZ;
 
-#define SDA_PIN 32  // 0x68
-#define SCL_PIN 33  // 0x69
+#define SDA_PIN 17  // 0x68
+#define SCL_PIN 18  // 0x69
 
 void loop_gy91()
 {
@@ -42,35 +42,24 @@ void loop_gy91()
     // Serial.print("\tY: " + String(aY));
     // Serial.print("\tZ: " + String(aZ));
 
-    // Serial.print("\tmag: ");
-    // Serial.print("\tX: " + String(mX));
-    // Serial.print("\tY: " + String(mY));
-    // Serial.print("\tZ: " + String(mZ));
+    Serial.print("\tmag: ");
+    Serial.print("\tX: " + String(mX));
+    Serial.print("\tY: " + String(mY));
+    Serial.print("\tZ: " + String(mZ));
 
-    // Serial.print("\tmDirection: " + String(mDirection));
+    Serial.print("\tmDirection: " + String(mDirection));
     
-    // Serial.print("\troll: " + String(roll));
-    // Serial.print("\tpitch: " + String(pitch));
+    Serial.print("\troll: " + String(roll));
+    Serial.print("\tpitch: " + String(pitch));
 
-    lv_img_set_angle(ui_motoRoll,roll*10);
+    Serial.print("\tTemperature(*C): ");
+    Serial.print(bmp.readTemperature());
+
+    Serial.print("\tPressure(Pa): ");
+    Serial.print(bmp.readPressure());
+
+    lv_img_set_angle(ui_roll,roll*10);
     lv_label_set_text_fmt(ui_rollText, "%d°", int(roll));
-
-    // Serial.print("\tTemperature(*C): ");
-    // Serial.print(bmp.readTemperature());
-
-    // Serial.print("\tPressure(Pa): ");
-    // Serial.print(bmp.readPressure());
-
-    // Serial.println("");
-}
-
-void loopGy91(void *pvParameters)
-{
-    while (1)
-    {
-        loop_gy91();
-        delay(100);
-    }
 }
 
 void setupGy91()
@@ -81,5 +70,4 @@ void setupGy91()
     mpu.beginGyro();
     mpu.beginMag();
     bmp.begin();
-    xTaskCreate(loopGy91, "loopGy91", 1024*2, NULL, 10, NULL);
 }
