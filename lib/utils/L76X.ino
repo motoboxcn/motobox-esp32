@@ -1,9 +1,12 @@
 #include <TinyGPSPlus.h>
 #include <SoftwareSerial.h>
+#include <ui.h>
 #include <dashboard.ino>
 
 static const int RXPin = 20, TXPin = 19;
 static const uint32_t GPSBaud = 9600;
+
+char *location;
 
 // The TinyGPSPlus object
 TinyGPSPlus gps;
@@ -11,25 +14,23 @@ TinyGPSPlus gps;
 // The serial connection to the GPS device
 SoftwareSerial ss(RXPin, TXPin);
 
-
 void displayInfo()
 {
   // time&date
   if (gps.date.isValid())
   {
-   char date[20];
-  // Convert gpstime to local time
-  time_t gpstime = gps.time.value();
-  struct tm* timeinfo;
-  // Set the timezone to Beijing
-  setenv("TZ", "Asia/Shanghai", 1);
-  tzset();
-  // Convert gpstime to local time in Beijing
-  timeinfo = localtime(&gpstime);
-  // Format the date and time as desired
-  strftime(date, sizeof(date), "%Y-%m-%d %H:%M:%S", timeinfo);
-  ui_time_update(date);
-  Serial.printf("date: %s\t", date);
+    char date[20];
+    // Convert gpstime to local time
+    time_t gpstime = gps.time.value();
+    struct tm* timeinfo;
+    // Set the timezone to Beijing  
+    setenv("TZ", "Asia/Shanghai", 1);
+    tzset();
+    // Convert gpstime to local time in Beijing
+    timeinfo = localtime(&gpstime);
+    // Format the date and time as desired
+    strftime(date, sizeof(date), "%Y-%m-%d %H:%M:%S", timeinfo);
+    ui_time_update(date);
   }
   else
   {
@@ -41,7 +42,6 @@ void displayInfo()
     static int speed = 0;
     speed = gps.speed.kmph();
     speed_dashboard(speed);
-    Serial.printf("speed: %d\t", speed);
   }
   else
   {
@@ -51,10 +51,9 @@ void displayInfo()
   // location
   if (gps.location.isValid())
   {
-    char location[64];
-    sprintf(location, "%f,%f", gps.location.lat(), gps.location.lng());
+    sprintf(location, "%.6f,%.6f", gps.location.lat(), gps.location.lng());
     lv_label_set_text(ui_gpsText, location);
-    Serial.printf("location: %s\t", location);
+    Serial.println(location);
   }
 
   // course to int
@@ -63,7 +62,6 @@ void displayInfo()
     char course[20];
     sprintf(course, "%.f", gps.course.deg());
     lv_label_set_text(ui_handingText, course);
-    Serial.printf("course: %s\t", course);
   }
   else
   {
@@ -75,7 +73,6 @@ void displayInfo()
     char altitude[20];
     sprintf(altitude, "%.f", gps.altitude.meters());
     lv_label_set_text(ui_altitudeText, altitude);
-    Serial.printf("altitude: %s\t", altitude);
   }
   else
   {
@@ -86,7 +83,6 @@ void displayInfo()
   {
     char satellites[20];
     sprintf(satellites, "%d", gps.satellites.value());
-    Serial.printf("satellites: %s\t", satellites);
     lv_label_set_text(ui_gpsNuText, satellites);
   }
   else
@@ -98,7 +94,6 @@ void displayInfo()
   {
     char hdop[20];
     sprintf(hdop, "%.f", gps.hdop.value());
-    Serial.printf("hdop: %s\t", hdop);
     lv_label_set_text(ui_hdopNuText, hdop);
     // lv_label_set_text(ui_hdopText, hdop);
   }
@@ -117,8 +112,8 @@ void LoopL76X()
   {
     Serial.println(F("No GPS detected: check wiring."));
   }
+  Serial.println(F("Done"));
 }
-
 
 void setupL76X()
 {

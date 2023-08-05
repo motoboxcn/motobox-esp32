@@ -9,7 +9,7 @@ void ui_Screen1_screen_init(void)
 {
 ui_Screen1 = lv_obj_create(NULL);
 lv_obj_clear_flag( ui_Screen1, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_radius(ui_Screen1, 50, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_radius(ui_Screen1, 40, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_color(ui_Screen1, lv_color_hex(0x05915D), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_Screen1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_grad_color(ui_Screen1, lv_color_hex(0x055088), LV_PART_MAIN | LV_STATE_DEFAULT );
@@ -175,7 +175,7 @@ lv_obj_set_height( ui_gpsText, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_gpsText, 44 );
 lv_obj_set_y( ui_gpsText, 94 );
 lv_obj_set_align( ui_gpsText, LV_ALIGN_CENTER );
-lv_label_set_text(ui_gpsText,"31.181807,120.668145");
+lv_label_set_text(ui_gpsText,"-,-");
 lv_obj_set_style_text_color(ui_gpsText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_gpsText, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_gpsText, &lv_font_montserrat_12, LV_PART_MAIN| LV_STATE_DEFAULT);
