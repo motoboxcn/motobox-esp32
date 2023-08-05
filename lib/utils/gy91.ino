@@ -36,12 +36,13 @@ void loop_gy91()
     float rollAverage = rollTotal / numReadings;
 
     // 降低灵敏度
-    float sensitivity = 0.5;  // 设置灵敏度，可以根据需要进行调整
+    float sensitivity = 1;  // 设置灵敏度，可以根据需要进行调整
     rollAverage = rollAverage * sensitivity;
 
     // 更新UI和其他操作
     lv_img_set_angle(ui_roll, rollAverage * 10);
     lv_label_set_text_fmt(ui_rollText, "%d°", int(rollAverage));
+    lv_timer_handler();
 }
 
 void setupGy91()

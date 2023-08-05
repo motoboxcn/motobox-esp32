@@ -30,13 +30,11 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 void ui_wifi_connect_off()
 {
     lv_obj_set_style_blend_mode(ui_wifi, LV_BLEND_MODE_MULTIPLY, 0);
-    lv_timer_handler();
 }
 
 void ui_wifi_connect_on(const char *location)
 {
     lv_obj_set_style_blend_mode(ui_wifi, LV_BLEND_MODE_NORMAL, 0);
-    lv_timer_handler();
 }
 
 void ui_gps_on()
