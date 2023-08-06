@@ -65,7 +65,7 @@ void ui_trip_off()
 void speed_dashboard(double speed)
 {
     lv_arc_set_value(ui_speed, speed);
-    lv_label_set_text_fmt(ui_speedText, "%3d", speed);
+    lv_label_set_text_fmt(ui_speedText, "%d", int(speed));
 
     if (speed < 80)
     {

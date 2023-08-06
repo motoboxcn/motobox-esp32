@@ -17,11 +17,12 @@ SoftwareSerial ss(RXPin, TXPin);
 void setupL76X()
 {
   ss.begin(GPSBaud);
+  Serial.print(F("Testing TinyGPSPlus library v. ")); Serial.println(TinyGPSPlus::libraryVersion());
   Serial.println("ESP32 with GPS is set up!");
 }
-
 void displayInfo()
 {
+  // time&date
   char date[20];
   Serial.print("GPS time: ");
   // 将日期和时间转换为字符串
@@ -100,11 +101,8 @@ void LoopL76X()
 {
   while (ss.available() > 0)
     if (gps.encode(ss.read()))
-    {
       displayInfo();
       lv_timer_handler();
-    }
-  // else
   // {
   //   Serial.println(ss.readStringUntil('\n'));
   // }

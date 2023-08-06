@@ -7,7 +7,7 @@
 // 创建任务调度器对象
 Scheduler taskScheduler;
 Task t1(20, TASK_FOREVER, &loop_gy91);
-Task t2(100, TASK_FOREVER, &LoopL76X);
+Task t2(0, TASK_FOREVER, &LoopL76X);
 
 void setup()
 {
@@ -20,13 +20,11 @@ void setup()
   taskScheduler.addTask(t1);
   taskScheduler.addTask(t2);
   taskScheduler.enableAll();
-  // t2.enable();
   Serial.println("Setup done");
 }
 
 void loop()
 {
   taskScheduler.execute();
-  // lv_timer_handler();
-  // delay(5);
+  // LoopL76X();
 }
