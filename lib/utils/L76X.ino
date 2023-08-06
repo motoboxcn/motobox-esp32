@@ -22,37 +22,26 @@ void setupL76X()
 
 void displayInfo()
 {
-  // time&date
-  if (gps.date.isValid())
-  {
-    char date[20];
-    // Convert gpstime to local time
-    time_t gpstime = gps.time.value();
-    struct tm *timeinfo;
-    // Set the timezone to Beijing
-    setenv("TZ", "Asia/Shanghai", 1);
-    tzset();
-    // Convert gpstime to local time in Beijing
-    timeinfo = localtime(&gpstime);
-    // Format the date and time as desired
-    strftime(date, sizeof(date), "%Y-%m-%d %H:%M:%S", timeinfo);
-    ui_time_update(date);
-  }
-  else
-  {
-    ui_time_update("1992-03-01 00:00:00");
-  }
+  char date[20];
+  Serial.print("GPS time: ");
+  // 将日期和时间转换为字符串
+  String year = String(gps.date.year()) ? String(gps.date.year()) : "1992";
+  String month = String(gps.date.month()) ? String(gps.date.month()) : "03";
+  String day = String(gps.date.day()) ? String(gps.date.day()) : "01";
+  String hour = String(gps.time.hour()) ? String(gps.time.hour()) : "00";
+  String minute = String(gps.time.minute()) ? String(gps.time.minute()) : "00";
+  String second = String(gps.time.second()) ? String(gps.time.second()) : "00";
+  // 格式化日期和时间字符串
+  snprintf(date, sizeof(date), "%04s-%02s-%02s %02s:%02s:%02s", year.c_str(), month.c_str(), day.c_str(), hour.c_str(), minute.c_str(), second.c_str());
+
+  // 打印日期和时间
+  Serial.println(date);
+  ui_time_update(date);
+
   // speed
-  if (gps.speed.isValid())
-  {
-    static int speed = 0;
-    speed = gps.speed.kmph();
-    speed_dashboard(speed);
-  }
-  else
-  {
-    speed_dashboard(0);
-  }
+  char speed[20];
+  double speedGPS = gps.speed.kmph() ? gps.speed.kmph() : 0.0;
+  speed_dashboard(speedGPS);
 
   // location
   if (gps.location.isValid())
@@ -115,10 +104,10 @@ void LoopL76X()
       displayInfo();
       lv_timer_handler();
     }
-    // else
-    // {
-    //   Serial.println(ss.readStringUntil('\n'));
-    // }
+  // else
+  // {
+  //   Serial.println(ss.readStringUntil('\n'));
+  // }
 
   if (millis() > 5000 && gps.charsProcessed() < 10) // if we don't hear from the GPS for 5 seconds, send an error message
   {

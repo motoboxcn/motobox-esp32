@@ -62,10 +62,10 @@ void ui_trip_off()
 // 超过 120，arc 变红色，label 变红色
 // 超过 199，arc 变红色，label 变红色，闪烁
 // lv_obj_set_style_bg_opa(ui_Screen1, 255, LV_PART_MAIN| LV_STATE_DEFAULT); 设置闪烁，额外定时器实现闪烁控制
-void speed_dashboard(int speed)
+void speed_dashboard(double speed)
 {
     lv_arc_set_value(ui_speed, speed);
-    lv_label_set_text_fmt(ui_speedText, "%d", speed);
+    lv_label_set_text_fmt(ui_speedText, "%3d", speed);
 
     if (speed < 80)
     {

@@ -41,7 +41,7 @@ void loop_gy91()
 
     // 更新UI和其他操作
     lv_img_set_angle(ui_roll, rollAverage * 10);
-    lv_label_set_text_fmt(ui_rollText, "%d°", int(rollAverage));
+    lv_label_set_text_fmt(ui_rollText, "%2d°", int(rollAverage));
     lv_timer_handler();
 }
 
