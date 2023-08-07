@@ -67,15 +67,15 @@ void speed_dashboard(double speed)
     lv_arc_set_value(ui_speed, speed);
     lv_label_set_text_fmt(ui_speedText, "%d", int(speed));
 
-    if (speed < 80)
+    if (speed < 40)
     {
         lv_obj_set_style_arc_color(ui_speed, lv_color_hex(0x2274C2), LV_PART_INDICATOR | LV_STATE_DEFAULT); // 设置颜色
     }
-    else if (speed < 120)
+    else if (speed < 80)
     {
         lv_obj_set_style_arc_color(ui_speed, lv_color_hex(0x0A9F62), LV_PART_INDICATOR | LV_STATE_DEFAULT);
     }
-    else if (speed < 200)
+    else if (speed < 120)
     {
         lv_obj_set_style_arc_color(ui_speed, lv_color_hex(0xEF1616), LV_PART_INDICATOR | LV_STATE_DEFAULT);
     }
@@ -101,7 +101,6 @@ void init_speed_dashboard()
     // Reset dashboard
     speed_dashboard(0);
 }
-
 
 // 初始化 ui
 void dashboardInit()
@@ -132,4 +131,50 @@ void ui_time_update(const char *time)
     lv_label_set_text(ui_gpsTime, time);
 }
 
-
+// course ui show
+void ui_course_update(const double angle)
+{
+    String direction;
+    if (angle >= 337.5 || angle < 22.5)
+    {
+        direction = "North";
+        lv_img_set_angle(ui_handing, -450);
+    }
+    else if (angle >= 22.5 && angle < 67.5)
+    {
+        direction = "Northeast";
+        lv_img_set_angle(ui_handing, 0);
+    }
+    else if (angle >= 67.5 && angle < 112.5)
+    {
+        direction = "East";
+        lv_img_set_angle(ui_handing, 450);
+    }
+    else if (angle >= 112.5 && angle < 157.5)
+    {
+        direction = "Southeast";
+        lv_img_set_angle(ui_handing, 900);
+    }
+    else if (angle >= 157.5 && angle < 202.5)
+    {
+        direction = "South";
+        lv_img_set_angle(ui_handing, 1350);
+    }
+    else if (angle >= 202.5 && angle < 247.5)
+    {
+        direction = "Southwest";
+        lv_img_set_angle(ui_handing, 1800);
+    }
+    else if (angle >= 247.5 && angle < 292.5)
+    {
+        direction = "West";
+        lv_img_set_angle(ui_handing, -1350);
+    }
+    else if (angle >= 292.5 && angle < 337.5)
+    {
+        direction = "Northwest";
+        lv_img_set_angle(ui_handing, -900);
+    }
+    lv_label_set_text(ui_handingText, direction.c_str());
+    lv_timer_handler();
+}

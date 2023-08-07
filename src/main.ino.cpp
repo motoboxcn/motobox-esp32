@@ -1,11 +1,17 @@
+# 1 "/var/folders/28/z1jd9trj1xv9ffjy7b6x0wf80000gp/T/tmpfpo5q7pe"
+#include <Arduino.h>
+# 1 "/Users/zhoushoujian/github/motobox-esp32/src/main.ino"
 #include <gy91.ino>
 #include <lvgl.h>
 #include <TaskScheduler.h>
 #include <L76X.ino>
-// #include <wifi.ino>
 
-// 创建任务调度器对象
+
+
 Scheduler taskScheduler;
+void setup();
+void loop();
+#line 9 "/Users/zhoushoujian/github/motobox-esp32/src/main.ino"
 Task t1(20, TASK_FOREVER, &loop_gy91_mid);
 Task t2(0, TASK_FOREVER, &LoopL76X);
 
@@ -15,7 +21,7 @@ void setup()
   dashboardInit();
   setupGy91();
   setupL76X();
-  // setupWifi();
+
   taskScheduler.init();
   taskScheduler.addTask(t1);
   taskScheduler.addTask(t2);
@@ -26,5 +32,5 @@ void setup()
 void loop()
 {
   taskScheduler.execute();
-  // LoopL76X();
+
 }

@@ -20,11 +20,11 @@ void setupL76X()
   Serial.print(F("Testing TinyGPSPlus library v. ")); Serial.println(TinyGPSPlus::libraryVersion());
   Serial.println("ESP32 with GPS is set up!");
 }
+
 void displayInfo()
 {
-  // time&date
   char date[20];
-  Serial.print("GPS time: ");
+  // time&date
   // 将日期和时间转换为字符串
   String year = String(gps.date.year()) ? String(gps.date.year()) : "1992";
   String month = String(gps.date.month()) ? String(gps.date.month()) : "03";
@@ -34,10 +34,20 @@ void displayInfo()
   String second = String(gps.time.second()) ? String(gps.time.second()) : "00";
   // 格式化日期和时间字符串
   snprintf(date, sizeof(date), "%04s-%02s-%02s %02s:%02s:%02s", year.c_str(), month.c_str(), day.c_str(), hour.c_str(), minute.c_str(), second.c_str());
-
-  // 打印日期和时间
-  Serial.println(date);
-  ui_time_update(date);
+  // 组装时间结构体
+  struct tm tm;
+  strptime(date, "%Y-%m-%d %H:%M:%S", &tm);
+  // 转换为时间戳
+  time_t t = mktime(&tm);
+  // 转换为北京时间
+  t += 8 * 3600;
+  // 转换为时间字符串
+  char timeString[20];
+  strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", localtime_r(&t, &tm));
+  // 打印北京时间
+  // Serial.print("Beijing time: ");
+  // Serial.println(timeString);
+  ui_time_update(timeString);
 
   // speed
   char speed[20];
@@ -54,9 +64,7 @@ void displayInfo()
   // course to int
   if (gps.course.isValid())
   {
-    char course[20];
-    sprintf(course, "%.f", gps.course.deg());
-    lv_label_set_text(ui_handingText, course);
+    ui_course_update(gps.course.deg());
   }
   else
   {
