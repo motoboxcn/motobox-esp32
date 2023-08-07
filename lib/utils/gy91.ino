@@ -38,13 +38,12 @@ void loop_gy91()
     // 降低灵敏度
     float sensitivity = 1;  // 设置灵敏度，可以根据需要进行调整
     rollAverage = rollAverage * sensitivity;
-    Serial.printf("rollAverage: %f\t", rollAverage);
+    // Serial.printf("rollAverage: %f\t", rollAverage);
 
     // 更新UI和其他操作
     lv_img_set_angle(ui_roll, rollAverage * 10);
     lv_label_set_text_fmt(ui_rollText, "%d°", int(rollAverage));
     lv_timer_handler();
-    Serial.println();
 }
 
 // 中值滤波
@@ -77,15 +76,16 @@ void loop_gy91_mid() {
   // 降低灵敏度
   float sensitivity = 1;  // 设置灵敏度，可以根据需要进行调整
   rollMedian = rollMedian * sensitivity;
-  Serial.print("rollMedian: ");
-  Serial.print(rollMedian);
-  Serial.print("\t");
+  // Serial.print("rollMedian: ");
+  // Serial.print(rollMedian);
+  // Serial.print("\t");
+  // Serial.println();
+
 
   // 更新UI和其他操作
   lv_img_set_angle(ui_roll, rollMedian * 10);
-  lv_label_set_text_fmt(ui_rollText, "%d°", int(rollMedian));
+  lv_label_set_text_fmt(ui_rollText, "%d° ", int(rollMedian));
   lv_timer_handler();
-  Serial.println();
 }
 
 void setupGy91()

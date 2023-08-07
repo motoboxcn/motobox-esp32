@@ -83,7 +83,6 @@ void speed_dashboard(double speed)
     {
         lv_obj_set_style_arc_color(ui_speed, lv_color_hex(0xEF1616), LV_PART_INDICATOR | LV_STATE_DEFAULT);
     }
-    lv_timer_handler();
 }
 // 初始化 ui 仪表盘 1-299 变化
 void init_speed_dashboard()
@@ -176,5 +175,4 @@ void ui_course_update(const double angle)
         lv_img_set_angle(ui_handing, -900);
     }
     lv_label_set_text(ui_handingText, direction.c_str());
-    lv_timer_handler();
 }
