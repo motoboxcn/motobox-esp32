@@ -142,17 +142,18 @@ ui_handing = lv_img_create(ui_Screen1);
 lv_img_set_src(ui_handing, &ui_img_direction_png);
 lv_obj_set_width( ui_handing, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_handing, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_handing, 27 );
-lv_obj_set_y( ui_handing, 56 );
+lv_obj_set_x( ui_handing, 34 );
+lv_obj_set_y( ui_handing, 57 );
 lv_obj_set_align( ui_handing, LV_ALIGN_CENTER );
 lv_obj_add_flag( ui_handing, LV_OBJ_FLAG_ADV_HITTEST );   /// Flags
 lv_obj_clear_flag( ui_handing, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_img_set_angle(ui_handing,-9);
 
 ui_handingText = lv_label_create(ui_Screen1);
 lv_obj_set_width( ui_handingText, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_handingText, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_handingText, 83 );
-lv_obj_set_y( ui_handingText, 59 );
+lv_obj_set_x( ui_handingText, 89 );
+lv_obj_set_y( ui_handingText, 55 );
 lv_obj_set_align( ui_handingText, LV_ALIGN_CENTER );
 lv_label_set_text(ui_handingText,"245°");
 lv_obj_set_style_text_color(ui_handingText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
@@ -175,7 +176,7 @@ lv_obj_set_height( ui_gpsText, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_gpsText, 44 );
 lv_obj_set_y( ui_gpsText, 94 );
 lv_obj_set_align( ui_gpsText, LV_ALIGN_CENTER );
-lv_label_set_text(ui_gpsText,"-,-");
+lv_label_set_text(ui_gpsText,"31.181807,120.668145");
 lv_obj_set_style_text_color(ui_gpsText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_gpsText, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_gpsText, &lv_font_montserrat_12, LV_PART_MAIN| LV_STATE_DEFAULT);

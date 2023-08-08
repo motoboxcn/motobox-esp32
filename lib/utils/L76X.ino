@@ -59,6 +59,8 @@ void displayInfo()
   {
     sprintf(location, "%.6f,%.6f", gps.location.lat(), gps.location.lng());
     lv_label_set_text(ui_gpsText, location);
+  }else{
+    lv_label_set_text(ui_gpsText, "-");
   }
 
   // course to int
@@ -68,7 +70,7 @@ void displayInfo()
   }
   else
   {
-    lv_label_set_text(ui_handingText, "0");
+    lv_label_set_text(ui_handingText, "-");
   }
   // altitude
   if (gps.altitude.isValid())
@@ -79,7 +81,7 @@ void displayInfo()
   }
   else
   {
-    lv_label_set_text(ui_altitudeText, "0");
+    lv_label_set_text(ui_altitudeText, "-");
   }
   // satellites 是一个在 GPS 定位中常用的术语，表示可见的卫星数量。在 GPS 接收器中，通过接收卫星发出的信号来确定位置。satellites 变量通常用于记录当前可见卫星的数量。通过跟踪更多的卫星，可以提高 GPS 定位的精度和可靠性。
   if (gps.satellites.isValid())
@@ -90,7 +92,7 @@ void displayInfo()
   }
   else
   {
-    lv_label_set_text(ui_gpsNuText, "0");
+    lv_label_set_text(ui_gpsNuText, "-");
   }
   // HDOP (Horizontal Dilution of Precision) 是一种用于衡量 GPS 位置精度的指标。它是通过衡量接收器在计算位置时的卫星几何分布来计算的。HDOP 值越小，表示接收器的位置精度越高。一般来说，较低的 HDOP 值表示较高的精度，较高的 HDOP 值表示较低的精度。HDOP 值通常在范围 0 到 10 之间，较理想的值是小于等于 1。
   if (gps.hdop.isValid())
@@ -101,7 +103,7 @@ void displayInfo()
   }
   else
   {
-    lv_label_set_text(ui_hdopNuText, "0");
+    lv_label_set_text(ui_hdopNuText, "-");
   }
 }
 
