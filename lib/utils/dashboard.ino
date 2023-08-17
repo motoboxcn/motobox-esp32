@@ -83,6 +83,7 @@ void speed_dashboard(double speed)
     {
         lv_obj_set_style_arc_color(ui_speed, lv_color_hex(0xEF1616), LV_PART_INDICATOR | LV_STATE_DEFAULT);
     }
+    lv_timer_handler();
 }
 // 初始化 ui 仪表盘 1-299 变化
 void init_speed_dashboard()
@@ -106,7 +107,7 @@ void dashboardInit()
 {
     lv_init();
     tft.begin();        /* TFT init */
-    tft.setRotation(3); /* Landscape orientation, flipped */
+    tft.setRotation(1); /* Landscape orientation, flipped */
 
     lv_disp_draw_buf_init(&draw_buf, buf, NULL, screenWidth * screenHeight / 10);
     /*Initialize the display*/

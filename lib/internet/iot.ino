@@ -11,7 +11,7 @@ const char *mqttServer = "iot-06z00irsh30z306.mqtt.iothub.aliyuncs.com";
 const int mqttPort = 1883;
 const char *mqttUsername = "device1&gt1glQ2SjlH";
 const char *mqttPassword = "3db274762ce91d5df7e709128bb36f33b7c105fbb388d4b6635e9b12f644efe5";
-const char *mqttClientId = "gt1glQ2SjlH.device1|securemode=2,signmethod=hmacsha256,timestamp=1691679515452|";
+const char *mqttClientId = "gt1glQ2SjlH.device1|securemode=2,signmethod=hmacsha256,timestamp=1691758959036|";
 const char *mqttTopic = "/sys/a13FN5TplKq/mqtt_basic_demo/thing/event/+/post_reply";
 
 WiFiClient wifiClient;
@@ -45,6 +45,7 @@ void setupIot()
 {
     setupWiFi();
 
+    mqttClient.setKeepAlive(60); // 设置Keepalive为60秒
     mqttClient.setServer(mqttServer, mqttPort);
     mqttClient.setCallback(callback);
 }
@@ -57,8 +58,6 @@ void loopIot()
 
         if (mqttClient.connect(mqttClientId, mqttUsername, mqttPassword))
         {
-            Serial.println("Connected to MQTT");
-
             mqttClient.subscribe(mqttTopic);
         }
         else
@@ -66,11 +65,9 @@ void loopIot()
             Serial.print("Failed to connect to MQTT, rc=");
             Serial.print(mqttClient.state());
             Serial.println(" retrying in 5 seconds...");
-
             delay(5000);
         }
     }
-    Serial.printf("loopIot\n");
 
     mqttClient.loop();
 }

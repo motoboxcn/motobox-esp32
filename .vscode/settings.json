@@ -52,5 +52,6 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/Users/zhoushoujian/github/motobox-esp32/.pio/libdeps/esp32dev/TFT_eSPI"
 }

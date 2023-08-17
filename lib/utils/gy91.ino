@@ -6,7 +6,7 @@ MPU9250_asukiaaa mpu;
 Adafruit_BMP280 bmp;
 float aX, aY, aZ, aSqrt, gX, gY, gZ, mDirection;
 float roll, pitch;
-int mX, mY, mZ;
+float magX, magY, magZ;
 
 #define SDA_PIN 17  // 0x68
 #define SCL_PIN 18  // 0x69

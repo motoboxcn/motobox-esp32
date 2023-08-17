@@ -1,8 +1,9 @@
 #include <WiFi.h>
-#include <dashboard.ino>
 
-static const char ssid[] = "mikas iPhone";
-static const char password[] = "11111111";
+// WiFi设置
+const char* ssid = "xiaomi-5-505";
+const char* password = "mkonjibhu";
+
 
 void initWifi()
 {
@@ -27,8 +28,4 @@ void initWifi()
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
-}
-void setupWifi()
-{
-    initWifi();
 }
