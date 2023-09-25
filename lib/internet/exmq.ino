@@ -25,7 +25,6 @@ void callback(char* topic, byte* payload, unsigned int length)
 
 void setupExMq()
 {
-
     initWifi();
     mqttClient.setServer(mqttServer, mqttPort);
     mqttClient.setCallback(callback);
@@ -52,6 +51,10 @@ void publishData()
 
 void loopExMq()
 {
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        return;
+    }
     if (!mqttClient.connected())
     {
         Serial.println("Connecting to MQTT...");
@@ -66,8 +69,8 @@ void loopExMq()
             Serial.println(" retrying in 5 seconds...");
             delay(5000);
         }
+        publishData();
     }
-    publishData();
     mqttClient.loop();
 }
 

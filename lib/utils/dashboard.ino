@@ -2,8 +2,6 @@
 #include <TFT_eSPI.h>
 #include <ui.h>
 
-// SCL 12, SDA 14,RES 27, DC 26, CS 25
-
 /*Change to your screen resolution*/
 static const uint16_t screenWidth = TFT_HEIGHT;
 static const uint16_t screenHeight = TFT_WIDTH;

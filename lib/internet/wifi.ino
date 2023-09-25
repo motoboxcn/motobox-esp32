@@ -16,7 +16,7 @@ void initWifi()
         delay(500);
         Serial.print(".");
         ui_wifi_connect_off();
-        if (count > 100)
+        if (count > 10)
         {
             break;
         }
