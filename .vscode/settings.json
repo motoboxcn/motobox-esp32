@@ -52,5 +52,7 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp"
-    }
+    },
+    "go.toolsManagement.checkForUpdates": "proxy",
+    "codeium.detectProxy": true
 }
