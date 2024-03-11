@@ -1,5 +1,5 @@
 #include <WiFi.h>
-#include <dashboard.ino>
+#include "dashboard.ino"
 
 static const char ssid[] = "mikas iPhone";
 static const char password[] = "11111111";
@@ -11,7 +11,7 @@ void initWifi()
     int count = 0;
     while (WiFi.status() != WL_CONNECTED)
     {
-        count ++;
+        count++;
         delay(500);
         Serial.print(".");
         ui_wifi_connect_off();

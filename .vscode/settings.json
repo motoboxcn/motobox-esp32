@@ -54,5 +54,6 @@
         "typeinfo": "cpp"
     },
     "go.toolsManagement.checkForUpdates": "proxy",
-    "codeium.detectProxy": true
+    "codeium.detectProxy": true,
+    "C_Cpp.errorSquiggles": "enabled"
 }

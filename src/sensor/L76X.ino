@@ -1,7 +1,6 @@
 #include <TinyGPSPlus.h>
 #include <SoftwareSerial.h>
 #include <ui.h>
-#include <dashboard.ino>
 
 static const int RXPin = 20, TXPin = 19;
 static const uint32_t GPSBaud = 9600;
