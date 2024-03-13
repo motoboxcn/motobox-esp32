@@ -1,6 +1,7 @@
 #include <TFT_eSPI.h>
 #include "../ui/ui.h"
 
+#define SPEED_LOG 0
 /*Change to your screen resolution*/
 static const uint16_t screenWidth = TFT_HEIGHT;
 static const uint16_t screenHeight = TFT_WIDTH;
@@ -32,14 +33,8 @@ void lv_flash_screen(uint32_t time)
     lv_tick_inc(time);
 }
 
-// 时速超过 一定值时，仪表盘变化：
-// 低于 80 ，arc 变绿色，label 变绿色
-// 超过 80，arc 变黄色，label 变黄色
-// 超过 120，arc 变红色，label 变红色
-void speed_dashboard(double speed)
+void speed_dashboard_without_time(double speed)
 {
-    Serial.println(speed);
-
     lv_arc_set_value(ui_speed, speed);
     lv_label_set_text_fmt(ui_speedText, "%d", int(speed));
     if (speed < 40)
@@ -58,7 +53,19 @@ void speed_dashboard(double speed)
     {
         lv_obj_set_style_arc_color(ui_speed, lv_color_hex(0xEF1616), LV_PART_INDICATOR | LV_STATE_DEFAULT);
     };
-    lv_flash_screen(5);
+}
+
+// 时速超过 一定值时，仪表盘变化：
+// 低于 80 ，arc 变绿色，label 变绿色
+// 超过 80，arc 变黄色，label 变黄色
+// 超过 120，arc 变红色，label 变红色
+void speed_dashboard(double speed, double time)
+{
+#if SPEED_LOG
+    Serial.println(speed);
+#endif
+    speed_dashboard_without_time(speed);
+    lv_flash_screen(time);
 }
 
 void ShowSpeed()
@@ -66,16 +73,16 @@ void ShowSpeed()
     // 初始化仪表盘
     for (int i = 0; i <= 299; i += 1)
     {
-        speed_dashboard(i);
+        speed_dashboard(i, 2);
     }
 
     for (int j = 299; j >= 0; j -= 1)
     {
-        speed_dashboard(j);
+        speed_dashboard(j, 2);
     }
     delay(10);
     // 重置仪表盘
-    speed_dashboard(0);
+    speed_dashboard(0, 2);
 }
 
 static void lv_demo_text()
@@ -85,7 +92,7 @@ static void lv_demo_text()
     lv_label_set_text(label, "Hello Ardino and LVGL!"); // 设置文本
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);         // 居中显示
     lv_timer_handler();
-    delay(5000);
+    delay(2000);
     lv_obj_clean(label);
 }
 
@@ -133,4 +140,37 @@ void ui_wifi_connect_on(char *ip)
     lv_obj_set_style_arc_color(ui_wifi, lv_color_hex(0x0A9F62), LV_PART_INDICATOR | LV_STATE_PRESSED);
     lv_obj_set_style_arc_color(ui_wifi, lv_color_hex(0x0A9F62), LV_PART_INDICATOR | LV_STATE_CHECKED);
     lv_obj_set_style_arc_color(ui_wifi, lv_color_hex(0x0A9F62), LV_PART_INDICATOR | LV_STATE_FOCUSED);
+}
+
+void speed_demon()
+{
+    // 模拟速度变化
+    // 定义一组速度数组，循环遍历数组，模拟速度变化
+    // 模拟启动速度变化，0开始到199，前面加速快，到120后速度变化慢
+    // 初始化速度数组
+    for (int i = 0; i < 30; i++)
+    {
+        speed_dashboard(i * 6.6, 100);
+    }
+
+    // 模拟最高速度后波动
+    for (int i = 0; i < 60; i++)
+    {
+        speed_dashboard(199 - random(-2, 2), 100);
+    }
+
+    // 开始刹车减速
+    for (int i = 0; i < 50; i++)
+    {
+        speed_dashboard(199 - (i * 4), 100);
+    }
+
+    // 重置仪表盘
+    speed_dashboard(0, 2);
+    delay(5000);
+}
+
+void speed_demon_task()
+{
+    speed_dashboard_without_time(random(0, 199));
 }
