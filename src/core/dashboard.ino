@@ -172,5 +172,5 @@ void speed_demon()
 
 void speed_demon_task()
 {
-    speed_dashboard_without_time(random(0, 199));
+    speed_dashboard_without_time(random(0, 299));
 }
