@@ -38,7 +38,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_x(ui_speedText, -56);
     lv_obj_set_y(ui_speedText, 8);
     lv_obj_set_align(ui_speedText, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_speedText, "80");
+    lv_label_set_text(ui_speedText, "299");
     lv_obj_set_style_text_color(ui_speedText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_speedText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_speedText, &lv_font_montserrat_42, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -91,7 +91,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_x(ui_rollText, 102);
     lv_obj_set_y(ui_rollText, 4);
     lv_obj_set_align(ui_rollText, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_rollText, "3.14°");
+    lv_label_set_text(ui_rollText, "0°");
     lv_obj_set_style_text_color(ui_rollText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_rollText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_rollText, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -122,7 +122,7 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_x(ui_altitudeText, 92);
     lv_obj_set_y(ui_altitudeText, -47);
     lv_obj_set_align(ui_altitudeText, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_altitudeText, "31m");
+    lv_label_set_text(ui_altitudeText, "00m");
     lv_obj_set_style_text_color(ui_altitudeText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_altitudeText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_altitudeText, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -133,32 +133,32 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_x(ui_gpsTime, 3);
     lv_obj_set_y(ui_gpsTime, -89);
     lv_obj_set_align(ui_gpsTime, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_gpsTime, "2023-07-03 21:21:30");
+    lv_label_set_text(ui_gpsTime, "1992-03-01 21:21:30");
     lv_obj_set_style_text_color(ui_gpsTime, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_gpsTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_gpsTime, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_handing = lv_img_create(ui_Screen1);
-    lv_img_set_src(ui_handing, &ui_img_direction_png);
-    lv_obj_set_width(ui_handing, LV_SIZE_CONTENT);  /// 1
-    lv_obj_set_height(ui_handing, LV_SIZE_CONTENT); /// 1
-    lv_obj_set_x(ui_handing, 34);
-    lv_obj_set_y(ui_handing, 57);
-    lv_obj_set_align(ui_handing, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_handing, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
-    lv_obj_clear_flag(ui_handing, LV_OBJ_FLAG_SCROLLABLE); /// Flags
-    lv_img_set_angle(ui_handing, -9);
+    ui_course = lv_img_create(ui_Screen1);
+    lv_img_set_src(ui_course, &ui_img_direction_png);
+    lv_obj_set_width(ui_course, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_course, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_x(ui_course, 34);
+    lv_obj_set_y(ui_course, 57);
+    lv_obj_set_align(ui_course, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_course, LV_OBJ_FLAG_ADV_HITTEST);  /// Flags
+    lv_obj_clear_flag(ui_course, LV_OBJ_FLAG_SCROLLABLE); /// Flags
+    lv_img_set_angle(ui_course, 0);
 
-    ui_handingText = lv_label_create(ui_Screen1);
-    lv_obj_set_width(ui_handingText, LV_SIZE_CONTENT);  /// 1
-    lv_obj_set_height(ui_handingText, LV_SIZE_CONTENT); /// 1
-    lv_obj_set_x(ui_handingText, 89);
-    lv_obj_set_y(ui_handingText, 55);
-    lv_obj_set_align(ui_handingText, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_handingText, "245°");
-    lv_obj_set_style_text_color(ui_handingText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_handingText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_handingText, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_courseText = lv_label_create(ui_Screen1);
+    lv_obj_set_width(ui_courseText, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_courseText, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_x(ui_courseText, 89);
+    lv_obj_set_y(ui_courseText, 55);
+    lv_obj_set_align(ui_courseText, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_courseText, "000°");
+    lv_obj_set_style_text_color(ui_courseText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_courseText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_courseText, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_bettery = lv_img_create(ui_Screen1);
     lv_img_set_src(ui_bettery, &ui_img_dianliang_png);
@@ -176,21 +176,21 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_x(ui_gpsText, 44);
     lv_obj_set_y(ui_gpsText, 94);
     lv_obj_set_align(ui_gpsText, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_gpsText, "31.181807,120.668145");
+    lv_label_set_text(ui_gpsText, "-999.999999\n+999.999999");
     lv_obj_set_style_text_color(ui_gpsText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_gpsText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_gpsText, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_gpsNuText = lv_label_create(ui_Screen1);
-    lv_obj_set_width(ui_gpsNuText, LV_SIZE_CONTENT);  /// 1
-    lv_obj_set_height(ui_gpsNuText, LV_SIZE_CONTENT); /// 1
-    lv_obj_set_x(ui_gpsNuText, -100);
-    lv_obj_set_y(ui_gpsNuText, -94);
-    lv_obj_set_align(ui_gpsNuText, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_gpsNuText, "99");
-    lv_obj_set_style_text_color(ui_gpsNuText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_gpsNuText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_gpsNuText, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_satellitesText = lv_label_create(ui_Screen1);
+    lv_obj_set_width(ui_satellitesText, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height(ui_satellitesText, LV_SIZE_CONTENT); /// 1
+    lv_obj_set_x(ui_satellitesText, -100);
+    lv_obj_set_y(ui_satellitesText, -94);
+    lv_obj_set_align(ui_satellitesText, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_satellitesText, "99");
+    lv_obj_set_style_text_color(ui_satellitesText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_satellitesText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_satellitesText, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_hdopNuText = lv_label_create(ui_Screen1);
     lv_obj_set_width(ui_hdopNuText, LV_SIZE_CONTENT);  /// 1

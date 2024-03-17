@@ -98,7 +98,7 @@ static void lv_demo_text()
 
 void LVSetup()
 {
-    String LVGL_Arduino = "Hello Arduino! ";
+    String LVGL_Arduino = "Hello Arduino LVGL!";
     LVGL_Arduino += String('V') + lv_version_major() + "." + lv_version_minor() + "." + lv_version_patch();
 
     Serial.println(LVGL_Arduino);
