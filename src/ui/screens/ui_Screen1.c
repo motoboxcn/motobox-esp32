@@ -192,16 +192,5 @@ void ui_Screen1_screen_init(void)
     lv_obj_set_style_text_opa(ui_satellitesText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_satellitesText, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_hdopNuText = lv_label_create(ui_Screen1);
-    lv_obj_set_width(ui_hdopNuText, LV_SIZE_CONTENT);  /// 1
-    lv_obj_set_height(ui_hdopNuText, LV_SIZE_CONTENT); /// 1
-    lv_obj_set_x(ui_hdopNuText, -120);
-    lv_obj_set_y(ui_hdopNuText, -77);
-    lv_obj_set_align(ui_hdopNuText, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_hdopNuText, "99");
-    lv_obj_set_style_text_color(ui_hdopNuText, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_hdopNuText, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_hdopNuText, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     lv_obj_add_event_cb(ui_speed, ui_event_speed, LV_EVENT_ALL, NULL);
 }

@@ -132,7 +132,6 @@ void displayInfo()
 void loop_l76x()
 {
 #if EnableGPS
-#if 1
   while (gpsSerial.available() > 0)
   {
     if (gps.encode(gpsSerial.read()))
@@ -140,47 +139,6 @@ void loop_l76x()
       displayInfo();
     }
   }
-#else
-  int numBytes = 1024;   // 读取的字节数量
-  char buffer[numBytes]; // 存储读取结果的数组
-  gpsSerial.readBytes(buffer, numBytes);
-  // 以为每次读取的数据是不连续的，所以要进行处理，截去掉开头的无效数据，然后再进行解析
-  // 截取第一个\r\n之前的数据
-  int start = 0;
-  for (int i = 0; i < numBytes; i++)
-  {
-    if (buffer[i] == '\r' || buffer[i] == '\n')
-    {
-      start = i + 1;
-    }
-    else
-    {
-      break;
-    }
-  }
-
-  // 截取掉最后一个\r\n后面的无效数据
-  for (int i = numBytes - start - 1; i >= 0; i--)
-  {
-    if (buffer[i] == '\r' || buffer[i] == '\n')
-    {
-      buffer[i] = '\0';
-    }
-    else
-    {
-      break;
-    }
-  }
-
-  Serial.println(buffer);
-  for (int i = 0; i < numBytes; i++)
-  {
-    if (gps.encode(buffer[i]))
-    {
-      displayInfo();
-    }
-  };
-#endif
 #else
   const char *gpsStream =
       "$GPRMC,045103.000,A,3014.1984,N,09749.2872,W,0.67,161.46,030913,,,A*7C\r\n"

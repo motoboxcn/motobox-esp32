@@ -41,7 +41,7 @@ float rollTotal = 0;             // roll读数的总和
 void loop_gy91()
 {
   // 更新传感器数据
-  // mpu.accelUpdate(); // 更新加速度计数据
+  mpu.accelUpdate(); // 更新加速度计数据
   aX = mpu.accelX();
   aY = mpu.accelY();
   aZ = mpu.accelZ();
