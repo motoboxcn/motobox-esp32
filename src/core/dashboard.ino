@@ -106,7 +106,7 @@ void LVSetup()
     lv_init();
 
     tft.begin();        // 初始化 TFT
-    tft.setRotation(3); // 设置为横屏模式
+    tft.setRotation(1); // 设置为横屏模式
 
     lv_disp_draw_buf_init(&draw_buf, buf, NULL, screenWidth * screenHeight / 10);
 
