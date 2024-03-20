@@ -1,6 +1,7 @@
 #include <TaskScheduler.h>
 #include "core/gy91.ino"
 #include "core/gps_l76x.ino"
+#include "core/ble.ino"
 
 #define USE_TFT 1   // 1开启 0关闭，是否开启TFT显示屏
 #define USE_DEMON 0 // 1开启 0关闭，是否模拟仪表变化
@@ -18,7 +19,7 @@ Scheduler taskScheduler;
 
 #define ENABLE_GY91 1 // 1开启 0关闭，是否开启陀螺仪
 #define ENABLE_L76X 1 // 1开启 0关闭，是否开启L76X
-#define ENABLE_WIFI 0 // 1开启 0关闭，是否开启wifi
+#define ENABLE_BLE 1  // 1开启 0关闭，是否开启BLE
 
 #if ENABLE_GY91
 Task t2(0, TASK_FOREVER, &loop_gy91);
@@ -26,6 +27,10 @@ Task t2(0, TASK_FOREVER, &loop_gy91);
 
 #if ENABLE_L76X
 Task t3(0, TASK_FOREVER, &loop_l76x);
+#endif
+
+#if ENABLE_BLE
+Task t4(1000, TASK_FOREVER, &loopBLE);
 #endif
 
 void setup()
@@ -58,6 +63,12 @@ void setup()
   setupL76X();
   taskScheduler.addTask(t3);
   Serial.println("add task l76xTask success.");
+#endif
+
+#if ENABLE_BLE
+  setupBLE();
+  taskScheduler.addTask(t4);
+  Serial.println("add task bleTask success.");
 #endif
 
   taskScheduler.enableAll();
