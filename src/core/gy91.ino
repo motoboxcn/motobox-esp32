@@ -30,14 +30,32 @@ void setupGy91()
 #endif
 }
 
-// 定义全局变量
-float roll, pitch;
-const int numReadings = 20;      // 用于计算移动平均的读数数量
-float rollReadings[numReadings]; // 存储roll读数的数组
-int rollIndex = 0;               // 当前读数的索引
-float rollTotal = 0;             // roll读数的总和
+float roll, pitch, yaw;
 
-// 平均滤波
+// 定义平均滤波数组大小
+#define FILTER_SIZE 32     // 缓冲区大小 ,32差不多，128 延迟大
+float buffer[FILTER_SIZE]; // 缓冲区
+int roll_index = 0;        // 缓冲区索引
+
+// 添加新数据到缓冲区中
+void addData(float newData)
+{
+  buffer[roll_index] = newData;
+  // 循环更新缓冲区索引
+  roll_index = (roll_index + 1) % FILTER_SIZE;
+}
+
+// 计算平均值
+float getFilteredData()
+{
+  float average = 0;
+  for (int i = 0; i < FILTER_SIZE; i++)
+  {
+    average += buffer[i];
+  }
+  return average / FILTER_SIZE;
+}
+
 void loop_gy91()
 {
   // 更新传感器数据
@@ -46,7 +64,11 @@ void loop_gy91()
   aY = mpu.accelY();
   aZ = mpu.accelZ();
   roll = atan(aY / sqrt(aX * aX + aZ * aZ)) * 180.0 / PI;
+  // 进行平均滤波
+  addData(roll);                          // 将数据放入缓冲区
+  float filteredData = getFilteredData(); // 获取平均值作为最终数据
+
   // 更新UI和其他操作
-  lv_img_set_angle(ui_roll, roll * 10);
-  lv_label_set_text_fmt(ui_rollText, "%d°", int(roll));
+  lv_img_set_angle(ui_roll, filteredData * 10);
+  lv_label_set_text_fmt(ui_rollText, "%d°", int(filteredData));
 }

@@ -2,7 +2,7 @@
 #include "core/gy91.ino"
 #include "core/gps_l76x.ino"
 
-#define USE_TFT 0   // 1开启 0关闭，是否开启TFT显示屏
+#define USE_TFT 1   // 1开启 0关闭，是否开启TFT显示屏
 #define USE_DEMON 0 // 1开启 0关闭，是否模拟仪表变化
 
 #if USE_TFT
