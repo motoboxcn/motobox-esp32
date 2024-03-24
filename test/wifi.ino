@@ -1,5 +1,4 @@
 #include <WiFi.h>
-#include "dashboard.ino"
 
 static const char ssid[] = "mikas iPhone";
 static const char password[] = "11111111";

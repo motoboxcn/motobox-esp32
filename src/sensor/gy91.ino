@@ -1,5 +1,6 @@
 #include <MPU9250_asukiaaa.h>
 #include <Adafruit_BMP280.h>
+#include "ble.ino"
 #include "../ui/ui.h"
 
 #define SDA_PIN 19 // 0x68
@@ -56,7 +57,21 @@ float getFilteredData()
   return average / FILTER_SIZE;
 }
 
-void loop_gy91()
+void bleSendGYRO(float filteredData)
+{
+  NimBLEService *pSvc = pServer->getServiceByUUID(GYRO_SERVICE_UUID);
+  if (pSvc)
+  {
+    NimBLECharacteristic *pChr = pSvc->getCharacteristic(GYRO_CHARACTERISTIC_UUID);
+    pChr->setValue(String(filteredData));
+    if (pChr)
+    {
+      pChr->notify(true);
+    }
+  }
+}
+
+void main_loop_gy91()
 {
   // 更新传感器数据
   mpu.accelUpdate(); // 更新加速度计数据
@@ -68,6 +83,9 @@ void loop_gy91()
   addData(roll);                          // 将数据放入缓冲区
   float filteredData = getFilteredData(); // 获取平均值作为最终数据
 
+#if ENABLE_BLE
+  bleSendGYRO(filteredData);
+#endif
   // 更新UI和其他操作
   lv_img_set_angle(ui_roll, filteredData * 10);
   lv_label_set_text_fmt(ui_rollText, "%d°", int(filteredData));

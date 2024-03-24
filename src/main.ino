@@ -1,36 +1,25 @@
+#define ENABLE_BLE 1  // 1开启 0关闭，是否开启BLE
+#define ENABLE_GY91 1 // 1开启 0关闭，是否开启陀螺仪
+#define ENABLE_L76X 1 // 1开启 0关闭，是否开启L76X
+#define USE_TFT 1     // 1开启 0关闭，是否开启TFT显示屏
+#define USE_DEMON 0   // 1开启 0关闭，是否模拟仪表变化
+
 #include <TaskScheduler.h>
-#include "core/gy91.ino"
-#include "core/gps_l76x.ino"
-#include "core/ble.ino"
-
-#define USE_TFT 1   // 1开启 0关闭，是否开启TFT显示屏
-#define USE_DEMON 0 // 1开启 0关闭，是否模拟仪表变化
-
-#if USE_TFT
 #include "core/dashboard.ino"
-#if USE_DEMON
-Task t1(200, TASK_FOREVER, &speed_demon_task);
-#endif
-
-#endif
+#include "sensor/gy91.ino"
+#include "sensor/gps_l76x.ino"
 
 // 创建任务调度器对象,任务执行必须是瞬时的，不能阻塞
 Scheduler taskScheduler;
 
-#define ENABLE_GY91 1 // 1开启 0关闭，是否开启陀螺仪
-#define ENABLE_L76X 1 // 1开启 0关闭，是否开启L76X
-#define ENABLE_BLE 1  // 1开启 0关闭，是否开启BLE
-
-#if ENABLE_GY91
-Task t2(0, TASK_FOREVER, &loop_gy91);
+#if USE_TFT
+#if USE_DEMON
+Task t1(200, TASK_FOREVER, &speed_demon_task);
+#endif
 #endif
 
 #if ENABLE_L76X
-Task t3(0, TASK_FOREVER, &loop_l76x);
-#endif
-
-#if ENABLE_BLE
-Task t4(1000, TASK_FOREVER, &loopBLE);
+Task t2(1000, TASK_FOREVER, &loop_l76x); // 任务执行时间间隔必须是 0 连续的，否则库解析字符串数据会出错
 #endif
 
 void setup()
@@ -43,32 +32,26 @@ void setup()
   ui_init();
   // 展示开机仪表动画
   ShowSpeed();
-
 #if USE_DEMON
   taskScheduler.addTask(t1);
   Serial.println("add task speedDemonTask success.");
 #endif
+#endif
 
+#if ENABLE_BLE
+  setupBLE();
 #endif
 
   taskScheduler.init();
 
 #if ENABLE_GY91
   setupGy91();
-  taskScheduler.addTask(t2);
-  Serial.println("add task gy91Task success.");
 #endif
 
 #if ENABLE_L76X
   setupL76X();
-  taskScheduler.addTask(t3);
+  taskScheduler.addTask(t2);
   Serial.println("add task l76xTask success.");
-#endif
-
-#if ENABLE_BLE
-  setupBLE();
-  taskScheduler.addTask(t4);
-  Serial.println("add task bleTask success.");
 #endif
 
   taskScheduler.enableAll();
@@ -78,6 +61,12 @@ void setup()
 void loop()
 {
   taskScheduler.execute();
+#if ENABLE_L76X
+  main_loop_l76x();
+#endif
+#if ENABLE_GY91
+  main_loop_gy91();
+#endif
   delay(5);
   lv_timer_handler();
   lv_tick_inc(5);

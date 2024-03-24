@@ -1,6 +1,15 @@
+#ifndef MY_FUNCTIONS_H
+#define MY_FUNCTIONS_H
+
 #include <NimBLEDevice.h>
 
 static NimBLEServer *pServer;
+
+#define GPS_SERVICE_UUID "BAAD"
+#define GPS_CHARACTERISTIC_UUID "F00D"
+
+#define GYRO_SERVICE_UUID "DEAD"
+#define GYRO_CHARACTERISTIC_UUID "BEEF"
 
 /**  None of these are required as they will be handled by the library with defaults. **
  **                       Remove as you see fit for your needs                        */
@@ -33,6 +42,8 @@ class ServerCallbacks : public NimBLEServerCallbacks
         Serial.println("Client disconnected - start advertising");
         NimBLEDevice::startAdvertising();
     };
+
+    // 当连接的MTU更改时，将调用此回调。MTU是最大传输单元的缩写，它是蓝牙连接的一部分。功能是指定蓝牙连接的数据包大小。
     void onMTUChange(uint16_t MTU, ble_gap_conn_desc *desc)
     {
         Serial.printf("MTU updated: %u for connection ID: %u\n", MTU, desc->conn_handle);
@@ -75,6 +86,7 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks
 {
     void onRead(NimBLECharacteristic *pCharacteristic)
     {
+        Serial.print("[onRead] ");
         Serial.print(pCharacteristic->getUUID().toString().c_str());
         Serial.print(": onRead(), value: ");
         Serial.println(pCharacteristic->getValue().c_str());
@@ -82,35 +94,32 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks
 
     void onWrite(NimBLECharacteristic *pCharacteristic)
     {
+        Serial.print("[onWrite] ");
         Serial.print(pCharacteristic->getUUID().toString().c_str());
         Serial.print(": onWrite(), value: ");
         Serial.println(pCharacteristic->getValue().c_str());
     };
-    /** Called before notification or indication is sent,
-     *  the value can be changed here before sending if desired.
-     */
-    void onNotify(NimBLECharacteristic *pCharacteristic)
-    {
-        Serial.println("Sending notification to clients");
+
+    // 当一个蓝牙设备发送通知时，接收方设备上的 onNotify 回调函数会被触发执行。
+    void onNotify(NimBLECharacteristic *pCharacteristic){
+        // Serial.println("[onNotify] Sending notification to clients");
     };
 
-    /** The status returned in status is defined in NimBLECharacteristic.h.
-     *  The value returned in code is the NimBLE host return code.
-     */
-    void onStatus(NimBLECharacteristic *pCharacteristic, Status status, int code)
-    {
-        String str = ("Notification/Indication status code: ");
-        str += status;
-        str += ", return code: ";
-        str += code;
-        str += ", ";
-        str += NimBLEUtils::returnCodeToString(code);
-        Serial.println(str);
+    // 当蓝牙设备之间的连接状态发生变化时（例如连接建立、连接断开等）
+    void onStatus(NimBLECharacteristic *pCharacteristic, Status status, int code){
+        // String str = ("[onStatus] Notification/Indication status code: ");
+        // str += status;
+        // str += ", return code: ";
+        // str += code;
+        // str += ", ";
+        // str += NimBLEUtils::returnCodeToString(code);
+        // Serial.println(str);
     };
 
+    // 当一个蓝牙设备订阅了一个特征值的通知或者指示时，接收方设备上的 onSubscribe 回调函数会被触发执行。
     void onSubscribe(NimBLECharacteristic *pCharacteristic, ble_gap_conn_desc *desc, uint16_t subValue)
     {
-        String str = "Client ID: ";
+        String str = "[onSubscribe] Client ID: ";
         str += desc->conn_handle;
         str += " Address: ";
         str += std::string(NimBLEAddress(desc->peer_ota_addr)).c_str();
@@ -190,17 +199,19 @@ void setupBLE()
     pServer = NimBLEDevice::createServer();
     pServer->setCallbacks(new ServerCallbacks());
 
-    NimBLEService *pDeadService = pServer->createService("DEAD");
+    NimBLEService *pDeadService = pServer->createService(GYRO_SERVICE_UUID);
     NimBLECharacteristic *pBeefCharacteristic = pDeadService->createCharacteristic(
-        "BEEF",
+        GYRO_CHARACTERISTIC_UUID,
         NIMBLE_PROPERTY::READ |
-            NIMBLE_PROPERTY::WRITE |
+            // NIMBLE_PROPERTY::WRITE |
             /** Require a secure connection for read and write access */
-            NIMBLE_PROPERTY::READ_ENC | // only allow reading if paired / encrypted
-            NIMBLE_PROPERTY::WRITE_ENC  // only allow writing if paired / encrypted
+            // NIMBLE_PROPERTY::READ_ENC | // only allow reading if paired / encrypted
+            // NIMBLE_PROPERTY::WRITE_ENC | // only allow writing if paired / encrypted
+            NIMBLE_PROPERTY::NOTIFY // allow notifications
+
     );
 
-    pBeefCharacteristic->setValue("Burger");
+    pBeefCharacteristic->setValue("GYROVALUE");
     pBeefCharacteristic->setCallbacks(&chrCallbacks);
 
     /** 2904 descriptors are a special case, when createDescriptor is called with
@@ -212,22 +223,22 @@ void setupBLE()
     pBeef2904->setFormat(NimBLE2904::FORMAT_UTF8);
     pBeef2904->setCallbacks(&dscCallbacks);
 
-    NimBLEService *pBaadService = pServer->createService("BAAD");
-    NimBLECharacteristic *pFoodCharacteristic = pBaadService->createCharacteristic(
-        "F00D",
+    NimBLEService *pBaadService = pServer->createService(GPS_SERVICE_UUID);
+    NimBLECharacteristic *pGyroCharacteristic = pBaadService->createCharacteristic(
+        GPS_CHARACTERISTIC_UUID,
         NIMBLE_PROPERTY::READ |
-            NIMBLE_PROPERTY::WRITE |
+            // NIMBLE_PROPERTY::WRITE |
             NIMBLE_PROPERTY::NOTIFY);
 
-    pFoodCharacteristic->setValue("Fries");
-    pFoodCharacteristic->setCallbacks(&chrCallbacks);
+    pGyroCharacteristic->setValue("GPSVALUE");
+    pGyroCharacteristic->setCallbacks(&chrCallbacks);
 
     /** Note a 0x2902 descriptor MUST NOT be created as NimBLE will create one automatically
      *  if notification or indication properties are assigned to a characteristic.
      */
 
     /** Custom descriptor: Arguments are UUID, Properties, max length in bytes of the value */
-    NimBLEDescriptor *pC01Ddsc = pFoodCharacteristic->createDescriptor(
+    NimBLEDescriptor *pC01Ddsc = pGyroCharacteristic->createDescriptor(
         "C01D",
         NIMBLE_PROPERTY::READ |
             NIMBLE_PROPERTY::WRITE |
@@ -253,19 +264,4 @@ void setupBLE()
     Serial.println("Advertising Started");
 }
 
-void loopBLE()
-{
-    /** Do your thing here, this just spams notifications to all connected clients */
-    if (pServer->getConnectedCount())
-    {
-        NimBLEService *pSvc = pServer->getServiceByUUID("BAAD");
-        if (pSvc)
-        {
-            NimBLECharacteristic *pChr = pSvc->getCharacteristic("F00D");
-            if (pChr)
-            {
-                pChr->notify(true);
-            }
-        }
-    }
-}
+#endif
