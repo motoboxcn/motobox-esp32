@@ -179,7 +179,7 @@ void bleSendGPS()
     NimBLECharacteristic *pChr = pSvc->getCharacteristic(GPS_CHARACTERISTIC_UUID);
     String GYROVALUES =
         String(printfTime(gps)) + "," + String(lat, 6) + "," + String(lng, 6) + "," + String(gps_speed) + "," +
-        String(gps_altitude) + "," + String(gps_course) + "," + String(gps_course_string) + "," + String(gps_satellites);
+        String(gps_altitude) + "," + String(gps_course) + "," + String(gps_course_string) + "," + String(gps_satellites) + ",";
     pChr->setValue(GYROVALUES);
     if (pChr)
     {
