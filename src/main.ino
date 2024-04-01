@@ -4,8 +4,8 @@
 #define USE_TFT 1     // 1开启 0关闭，是否开启TFT显示屏
 #define USE_DEMON 0   // 1开启 0关闭，是否模拟仪表变化
 
-#include <TaskScheduler.h>
 #include "core/dashboard.ino"
+#include <TaskScheduler.h>
 #include "sensor/gy91.ino"
 #include "sensor/gps_l76x.ino"
 
@@ -25,6 +25,8 @@ Task t2(1000, TASK_FOREVER, &loop_l76x); // 任务执行时间间隔必须是 0 
 void setup()
 {
   Serial.begin(115200);
+  taskScheduler.init();
+
 #if USE_TFT
   // 初始化函数TFT仪表驱动和LVGL
   LVSetup();
@@ -41,8 +43,6 @@ void setup()
 #if ENABLE_BLE
   setupBLE();
 #endif
-
-  taskScheduler.init();
 
 #if ENABLE_GY91
   setupGy91();
@@ -68,6 +68,10 @@ void loop()
   main_loop_gy91();
 #endif
   delay(5);
-  lv_timer_handler();
-  lv_tick_inc(5);
+
+  if (USE_TFT)
+  {
+    lv_timer_handler();
+    lv_tick_inc(5);
+  }
 }

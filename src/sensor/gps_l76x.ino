@@ -58,28 +58,15 @@ void main_loop_l76x()
         lat = gps.location.lat();
         lng = gps.location.lng();
       }
-      else
-      {
-        lat = 0;
-        lng = 0;
-      }
 
       if (gps.speed.isValid())
       {
         gps_speed = gps.speed.kmph();
       }
-      else
-      {
-        gps_speed = 0;
-      }
 
       if (gps.altitude.isValid())
       {
         gps_altitude = gps.altitude.meters();
-      }
-      else
-      {
-        gps_altitude = 0;
       }
 
       if (gps.course.isValid())
@@ -87,19 +74,10 @@ void main_loop_l76x()
         gps_course = gps.course.deg();
         gps_course_string = printfCourse(gps_course);
       }
-      else
-      {
-        gps_course = -1;
-        gps_course_string = "-";
-      }
 
       if (gps.satellites.isValid())
       {
         gps_satellites = gps.satellites.value();
-      }
-      else
-      {
-        gps_satellites = -1;
       }
     }
   }
@@ -127,47 +105,23 @@ void displayInfo()
     lv_label_set_text_fmt(ui_gpsTime, "%s", printfTime(gps));
   }
 
-  // Location
-  if (gps.location.isValid())
+  if (gps_satellites == 0)
+  {
+    lv_label_set_text_fmt(ui_gpsText, "No GPS Signal");
+    speed_dashboard_without_time(0);
+    lv_label_set_text_fmt(ui_altitudeText, "--m");
+    lv_label_set_text_fmt(ui_courseText, "---");
+    lv_img_set_angle(ui_course, 0);
+    lv_label_set_text_fmt(ui_satellitesText, "0");
+  }
+  else
   {
     lv_label_set_text_fmt(ui_gpsText, "%s, %s", String(lat, 6), String(lng, 6));
-  }
-
-  if (gps.speed.isValid())
-  {
     speed_dashboard_without_time(gps_speed);
-  }
-  else
-  {
-    lv_label_set_text_fmt(ui_speedText, "---");
-  }
-
-  if (gps.altitude.isValid())
-  {
     lv_label_set_text_fmt(ui_altitudeText, "%sm", String(gps_altitude, 1));
-  }
-  else
-  {
-    lv_label_set_text_fmt(ui_altitudeText, "---");
-  }
-
-  if (gps.course.isValid())
-  {
     lv_label_set_text_fmt(ui_courseText, "%s", gps_course_string);
     lv_img_set_angle(ui_course, gps_course * 10);
-  }
-  else
-  {
-    lv_label_set_text_fmt(ui_courseText, "---");
-  }
-
-  if (gps.satellites.isValid())
-  {
     lv_label_set_text_fmt(ui_satellitesText, "%d", gps_satellites);
-  }
-  else
-  {
-    lv_label_set_text_fmt(ui_satellitesText, "--");
   }
 }
 
@@ -180,6 +134,10 @@ void bleSendGPS()
     String GYROVALUES =
         String(printfTime(gps)) + "," + String(lat, 6) + "," + String(lng, 6) + "," + String(gps_speed) + "," +
         String(gps_altitude) + "," + String(gps_course) + "," + String(gps_course_string) + "," + String(gps_satellites) + ",";
+    if (gps_satellites == 0)
+    {
+      GYROVALUES = String(printfTime(gps)) + ",------,------,0,--,0,---," + String(gps_satellites) + ",";
+    }
     pChr->setValue(GYROVALUES);
     if (pChr)
     {
@@ -192,7 +150,9 @@ void bleSendGPS()
 
 void loop_l76x()
 {
+#if USE_TFT
   displayInfo();
+#endif
 #if ENABLE_BLE
   bleSendGPS();
 #endif
