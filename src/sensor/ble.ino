@@ -101,12 +101,12 @@ class CharacteristicCallbacks : public NimBLECharacteristicCallbacks
     };
 
     // 当一个蓝牙设备发送通知时，接收方设备上的 onNotify 回调函数会被触发执行。
-    void onNotify(NimBLECharacteristic *pCharacteristic){
+    void onNotify(NimBLECharacteristic *pCharacteristic) {
         // Serial.println("[onNotify] Sending notification to clients");
     };
 
     // 当蓝牙设备之间的连接状态发生变化时（例如连接建立、连接断开等）
-    void onStatus(NimBLECharacteristic *pCharacteristic, Status status, int code){
+    void onStatus(NimBLECharacteristic *pCharacteristic, Status status, int code) {
         // String str = ("[onStatus] Notification/Indication status code: ");
         // str += status;
         // str += ", return code: ";
