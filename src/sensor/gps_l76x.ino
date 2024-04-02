@@ -7,7 +7,7 @@
 #define EnableGPS 1
 
 #if EnableGPS
-SoftwareSerial gpsSerial(22, 23); // RX, TX
+SoftwareSerial gpsSerial(18, 19); // RX, TX
 #endif
 
 // The TinyGPSPlus object

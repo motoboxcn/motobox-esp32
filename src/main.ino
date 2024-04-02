@@ -1,7 +1,7 @@
 #define ENABLE_BLE 1  // 1开启 0关闭，是否开启BLE
 #define ENABLE_GY91 1 // 1开启 0关闭，是否开启陀螺仪
 #define ENABLE_L76X 1 // 1开启 0关闭，是否开启L76X
-#define USE_TFT 1     // 1开启 0关闭，是否开启TFT显示屏
+#define USE_TFT 0     // 1开启 0关闭，是否开启TFT显示屏
 #define USE_DEMON 0   // 1开启 0关闭，是否模拟仪表变化
 
 #include "core/dashboard.ino"
@@ -61,12 +61,15 @@ void setup()
 void loop()
 {
   taskScheduler.execute();
+
 #if ENABLE_L76X
   main_loop_l76x();
 #endif
+
 #if ENABLE_GY91
   main_loop_gy91();
 #endif
+
   delay(5);
 
   if (USE_TFT)
