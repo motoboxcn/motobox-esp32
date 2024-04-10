@@ -1,7 +1,7 @@
 #define ENABLE_BLE 1  // 1开启 0关闭，是否开启BLE
 #define ENABLE_GY91 1 // 1开启 0关闭，是否开启陀螺仪
 #define ENABLE_L76X 1 // 1开启 0关闭，是否开启L76X
-#define USE_TFT 1     // 1开启 0关闭，是否开启TFT显示屏
+#define USE_TFT 0     // 1开启 0关闭，是否开启TFT显示屏
 #define USE_DEMON 0   // 1开启 0关闭，是否模拟仪表变化
 
 #include "core/dashboard.ino"
@@ -19,7 +19,11 @@ Task t1(200, TASK_FOREVER, &speed_demon_task);
 #endif
 
 #if ENABLE_L76X
-Task t2(1000, TASK_FOREVER, &loop_l76x); // 任务执行时间间隔必须是 0 连续的，否则库解析字符串数据会出错
+Task t2(250, TASK_FOREVER, &loop_l76x); // 任务执行时间间隔必须是 0 连续的，否则库解析字符串数据会出错
+#endif
+
+#if ENABLE_GY91
+Task t3(100, TASK_FOREVER, &loop_gy91);
 #endif
 
 void setup()
@@ -46,6 +50,8 @@ void setup()
 
 #if ENABLE_GY91
   setupGy91();
+  taskScheduler.addTask(t3);
+  Serial.println("add task gy91Task success.");
 #endif
 
 #if ENABLE_L76X
@@ -63,9 +69,6 @@ void loop()
   taskScheduler.execute();
 #if ENABLE_L76X
   main_loop_l76x();
-#endif
-#if ENABLE_GY91
-  main_loop_gy91();
 #endif
   delay(5);
 

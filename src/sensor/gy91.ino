@@ -34,7 +34,7 @@ void setupGy91()
 float roll, pitch, yaw;
 
 // 定义平均滤波数组大小
-#define FILTER_SIZE 32     // 缓冲区大小 ,32差不多，128 延迟大
+#define FILTER_SIZE 4      // 缓冲区大小 和刷新速度有关 越快越小，否则会有延迟
 float buffer[FILTER_SIZE]; // 缓冲区
 int roll_index = 0;        // 缓冲区索引
 
@@ -71,7 +71,7 @@ void bleSendGYRO(float filteredData)
   }
 }
 
-void main_loop_gy91()
+void loop_gy91()
 {
   // 更新传感器数据
   mpu.accelUpdate(); // 更新加速度计数据
@@ -82,11 +82,14 @@ void main_loop_gy91()
   // 进行平均滤波
   addData(roll);                          // 将数据放入缓冲区
   float filteredData = getFilteredData(); // 获取平均值作为最终数据
-
+  Serial.printf("roll: %f/%f\t", filteredData, roll);
 #if ENABLE_BLE
   bleSendGYRO(filteredData);
 #endif
+
+#if USE_TFT
   // 更新UI和其他操作
   lv_img_set_angle(ui_roll, filteredData * 10);
   lv_label_set_text_fmt(ui_rollText, "%d°", int(filteredData));
+#endif
 }
