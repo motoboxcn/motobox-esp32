@@ -1,13 +1,15 @@
 #define ENABLE_BLE 1  // 1开启 0关闭，是否开启BLE
 #define ENABLE_GY91 1 // 1开启 0关闭，是否开启陀螺仪
 #define ENABLE_L76X 1 // 1开启 0关闭，是否开启L76X
-#define USE_TFT 0     // 1开启 0关闭，是否开启TFT显示屏
+#define USE_TFT 1     // 1开启 0关闭，是否开启TFT显示屏
 #define USE_DEMON 0   // 1开启 0关闭，是否模拟仪表变化
 
 #include "core/dashboard.ino"
 #include <TaskScheduler.h>
 #include "sensor/gy91.ino"
 #include "sensor/gps_l76x.ino"
+
+#define BOOT_BTN_PIN 0 // boot按键的引脚
 
 // 创建任务调度器对象,任务执行必须是瞬时的，不能阻塞
 Scheduler taskScheduler;
@@ -28,16 +30,17 @@ Task t3(100, TASK_FOREVER, &loop_gy91);
 
 void setup()
 {
+  pinMode(BOOT_BTN_PIN, INPUT_PULLUP);
+
   Serial.begin(115200);
   taskScheduler.init();
 
 #if USE_TFT
   // 初始化函数TFT仪表驱动和LVGL
   LVSetup();
-  // 初始化UI图形
-  ui_init();
-  // 展示开机仪表动画
   ShowSpeed();
+  Serial.println("Ready!");
+
 #if USE_DEMON
   taskScheduler.addTask(t1);
   Serial.println("add task speedDemonTask success.");
@@ -66,6 +69,17 @@ void setup()
 
 void loop()
 {
+  // 处理按键抖动，防止误触
+  if (!digitalRead(BOOT_BTN_PIN))
+  {
+    delay(100);
+    if (!digitalRead(BOOT_BTN_PIN))
+    {
+      Serial.println("Boot button pressed");
+      reloadTFT();
+    }
+  }
+
   taskScheduler.execute();
 #if ENABLE_L76X
   main_loop_l76x();
